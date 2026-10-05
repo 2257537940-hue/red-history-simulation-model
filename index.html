@@ -219,11 +219,11 @@ const dims=[
  {key:"support",label:"组织支持",group:"外部条件",definition:"党建带团建、红色导师与校地协同保障"}
 ];
 const pathLib=[
- {id:"A",name:"沉浸式情感共鸣路径",desc:"以实物、场景、英烈家书和仪式唤醒情感体验",weights:{body:1.2,emotion:1.5,view:.8,action:.8,team:.9,support:.8},actions:["优先选择华东革命烈士陵园等具有实物场景和现场叙事条件的场馆","实践前研读一封英烈家书，并在参观后完成一次集体分享","用文字、照片或短视频记录最能触动自己的历史细节"],venue:"华东革命烈士陵园"},
- {id:"B",name:"团队研讨行动转化路径",desc:"以角色分工、团支部研讨和行动任务促进知行转化",weights:{body:.9,emotion:1.1,view:.9,action:1.5,team:1.4,support:1.0},actions:["建立催化员、记录员、观察员、分享员四位一体角色分工","参观前后各开展一次团支部专题研讨并形成行动清单","在三个月内完成一次红色宣讲、志愿服务或社会调研"],venue:"沂蒙革命纪念馆"},
- {id:"C",name:"理论深化认知路径",desc:"以史料研读、问题链和专题研讨夯实历史观认知",weights:{body:.8,emotion:1.0,view:1.6,action:.9,team:.9,support:.9},actions:["围绕重大历史脉络设置问题链和史料阅读任务","每次实践形成一份历史逻辑梳理或研学报告","由红色导师对历史判断和观点表达进行反馈"],venue:"延安革命纪念馆"},
- {id:"D",name:"校地协同实践路径",desc:"以校地联席、红色导师和持续实践项目强化组织支持",weights:{body:.9,emotion:.9,view:.9,action:1.2,team:1.1,support:1.5},actions:["推动高校团委与场馆建立季度校地联席会议","配备党员带队教师和场馆红色导师","将实践纳入党校、青马工程和主题团日常态化项目"],venue:"井冈山革命博物馆"},
- {id:"E",name:"维持与内化路径",desc:"面向基础扎实学生，强调长期行动自觉与高阶实践",weights:{body:1,emotion:1,view:1,action:1.05,team:1,team_resonance:1,support:1.1},actions:["担任红色志愿讲解员或朋辈宣讲人","参与口述史采集、实地调研或红色文创开发","将红色精神融入专业学习与长期志愿服务"],venue:"校内红色宣讲团"}
+ {id:"A",name:"沉浸式情感共鸣路径",desc:"以实物、场景、英烈家书和仪式唤醒情感体验",weights:{body:1.2,emotion:1.5,view:.8,action:.8,team_resonance:.9,support:.8},actions:["优先选择华东革命烈士陵园等具有实物场景和现场叙事条件的场馆","实践前研读一封英烈家书，并在参观后完成一次集体分享","用文字、照片或短视频记录最能触动自己的历史细节"],venue:"华东革命烈士陵园"},
+ {id:"B",name:"团队研讨行动转化路径",desc:"以角色分工、团支部研讨和行动任务促进知行转化",weights:{body:.9,emotion:1.1,view:.9,action:1.5,team_resonance:1.4,support:1.0},actions:["建立催化员、记录员、观察员、分享员四位一体角色分工","参观前后各开展一次团支部专题研讨并形成行动清单","在三个月内完成一次红色宣讲、志愿服务或社会调研"],venue:"沂蒙革命纪念馆"},
+ {id:"C",name:"理论深化认知路径",desc:"以史料研读、问题链和专题研讨夯实历史观认知",weights:{body:.8,emotion:1.0,view:1.6,action:.9,team_resonance:.9,support:.9},actions:["围绕重大历史脉络设置问题链和史料阅读任务","每次实践形成一份历史逻辑梳理或研学报告","由红色导师对历史判断和观点表达进行反馈"],venue:"延安革命纪念馆"},
+ {id:"D",name:"校地协同实践路径",desc:"以校地联席、红色导师和持续实践项目强化组织支持",weights:{body:.9,emotion:.9,view:.9,action:1.2,team_resonance:1.1,support:1.5},actions:["推动高校团委与场馆建立季度校地联席会议","配备党员带队教师和场馆红色导师","将实践纳入党校、青马工程和主题团日常态化项目"],venue:"井冈山革命博物馆"},
+ {id:"E",name:"维持与内化路径",desc:"面向基础扎实学生，强调长期行动自觉与高阶实践",weights:{body:1,emotion:1,view:1,action:1.05,team_resonance:1,support:1.1},actions:["担任红色志愿讲解员或朋辈宣讲人","参与口述史采集、实地调研或红色文创开发","将红色精神融入专业学习与长期志愿服务"],venue:"校内红色宣讲团"}
 ];
 function scoreFromForm(k){const v=q("scoreA-"+k)?.value;return v===""||v==null?0:Math.max(0,Math.min(4,Number(v)||0))}
 function currentPathScores(){const o={};dims.forEach(d=>o[d.key]=scoreFromForm(d.key));return o}
