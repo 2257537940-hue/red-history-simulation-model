@@ -631,23 +631,32 @@ details summary{cursor:pointer}
       }
       countTo('ba-pre',preS,620); countTo('ba-post',postS,620); countTo('ba-diff',postS-preS,620);
     })();
-    requestAnimationFrame(function(){
+    (function(){
       var barsList=[].slice.call(q('#v20-beforeafter').querySelectorAll('rect.ba-bar'));
-      barsList.forEach(function(r,i){
-        var th=parseFloat(r.getAttribute('data-h'))||0, ty=parseFloat(r.getAttribute('data-y'))||0, by=parseFloat(r.getAttribute('data-base'))||0;
-        var st=null;
-        function step(ts){
-          if(st===null)st=ts;
-          var t=ts-st-i*38;
-          if(t<0){requestAnimationFrame(step);return}
-          var p=Math.min(1,t/560), e=1-Math.pow(1-p,3);
-          r.setAttribute('height',(th*e).toFixed(2));
-          r.setAttribute('y',(by+(ty-by)*e).toFixed(2));
-          if(p<1)requestAnimationFrame(step);
-        }
-        requestAnimationFrame(step);
-      });
-    });
+      if(!barsList.length)return;
+      var GROW=1100, HOLD=1300, SHRINK=500, CYCLE=GROW+HOLD+SHRINK, start=null;
+      function ease(p){return 1-Math.pow(1-p,3)}
+      function frame(ts){
+        if(!barsList[0]||!barsList[0].isConnected)return;
+        if(start===null)start=ts;
+        var t=(ts-start)%CYCLE;
+        barsList.forEach(function(r,i){
+          var th=parseFloat(r.getAttribute('data-h'))||0,
+              ty=parseFloat(r.getAttribute('data-y'))||0,
+              by=parseFloat(r.getAttribute('data-base'))||0;
+          var tt=t-i*32; if(tt<0)tt=0;
+          var f;
+          if(tt<GROW)f=ease(tt/GROW);
+          else if(tt<GROW+HOLD)f=1;
+          else f=1-ease(Math.min(1,(tt-GROW-HOLD)/SHRINK));
+          if(f<0)f=0;
+          r.setAttribute('height',(th*f).toFixed(2));
+          r.setAttribute('y',(by+(ty-by)*f).toFixed(2));
+        });
+        requestAnimationFrame(frame);
+      }
+      requestAnimationFrame(frame);
+    })();
     var diff=postS-preS, pct=preS?Math.round(diff/preS*100):0;
     var all=(window.__DOC_SIM_API&&window.__DOC_SIM_API.data||[]).filter(function(d){return typeof d.spiral==='number'&&String(d.id)!=='新'});
     function ma(d){var g=function(k){return Number(d[k])||0};return (((g('body')+g('view'))/2)+((g('team_resonance')+g('support'))/2)+((g('emotion')+g('action'))/2))/3}
