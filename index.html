@@ -464,6 +464,11 @@ details summary{cursor:pointer}
 .v20-whead,.v20-wrow{display:grid;grid-template-columns:1fr 90px 90px 90px;gap:8px;font-size:12px;padding:6px 0;border-bottom:1px dashed #e8e1da;color:#4f474b}
 .v20-whead{font-weight:700;color:#8a8085;border-bottom:1px solid #e4e8e7}
 .v20-wrow b{font-weight:600;color:#3f3a3c}
+.ba-kpi{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-bottom:10px}
+.ba-kpi>div{background:#fbfcfc;border:1px solid #e4e8e7;border-radius:8px;padding:10px 12px;text-align:center}
+.ba-kpi span{display:block;font-size:11px;color:#8a8085;margin-bottom:4px}
+.ba-kpi b{font-size:22px;color:#a8696a;font-family:'JetBrains Mono',Consolas,monospace}
+.ba-kpi .ba-mid b{color:#bc7873}
 #v20-beforeafter .ba-bar{transition:opacity .2s}
 #v20-beforeafter .ba-bar:hover{opacity:.8}
 #v20-evidence{animation:baFade .6s ease both}
@@ -606,13 +611,43 @@ details summary{cursor:pointer}
     var W=640,H=320,l=44,r=12,t=28,b=58,pw=W-l-r,ph=H-t-b,gw=pw/keys.length,bw=gw*0.28,grid='',bars='';
     for(var v=0;v<=4;v++){var yy=t+ph-v/4*ph;grid+='<line x1="'+l+'" y1="'+yy+'" x2="'+(l+pw)+'" y2="'+yy+'" stroke="#e4e8e7"/><text x="'+(l-8)+'" y="'+(yy+3)+'" text-anchor="end" font-size="10" fill="#8a8085">'+v+'</text>'}
     keys.forEach(function(k,i){var x0=l+i*gw+gw*0.5,hp=(pre[k]/4)*ph,hn=(s[k]/4)*ph;
-      bars+='<rect class="ba-bar" x="'+(x0-bw-2)+'" y="'+(t+ph)+'" width="'+bw+'" height="0" rx="3" fill="#b8b8bb"><animate attributeName="height" from="0" to="'+hp+'" dur="0.65s" begin="'+(i*0.06)+'s" fill="freeze"/><animate attributeName="y" from="'+(t+ph)+'" to="'+(t+ph-hp)+'" dur="0.65s" begin="'+(i*0.06)+'s" fill="freeze"/><title>机制介入前 '+NAMES[k]+'：'+pre[k]+'</title></rect>';
-      bars+='<rect class="ba-bar" x="'+(x0+2)+'" y="'+(t+ph)+'" width="'+bw+'" height="0" rx="3" fill="#bc7873"><animate attributeName="height" from="0" to="'+hn+'" dur="0.65s" begin="'+(i*0.06+0.12)+'s" fill="freeze"/><animate attributeName="y" from="'+(t+ph)+'" to="'+(t+ph-hn)+'" dur="0.65s" begin="'+(i*0.06+0.12)+'s" fill="freeze"/><title>机制介入后 '+NAMES[k]+'：'+s[k]+'</title></rect>';
+      bars+='<rect class="ba-bar" x="'+(x0-bw-2)+'" y="'+(t+ph)+'" width="'+bw+'" height="0" rx="3" fill="#b8b8bb" data-h="'+hp+'" data-y="'+(t+ph-hp)+'" data-base="'+(t+ph)+'"><title>机制介入前 '+NAMES[k]+'：'+pre[k]+'</title></rect>';
+      bars+='<rect class="ba-bar" x="'+(x0+2)+'" y="'+(t+ph)+'" width="'+bw+'" height="0" rx="3" fill="#bc7873" data-h="'+hn+'" data-y="'+(t+ph-hn)+'" data-base="'+(t+ph)+'"><title>机制介入后 '+NAMES[k]+'：'+s[k]+'</title></rect>';
       bars+='<text x="'+x0+'" y="'+(H-34)+'" text-anchor="middle" font-size="10" fill="#70666a">'+NAMES[k]+'</text>';
       if(s[k]!==pre[k])bars+='<text x="'+x0+'" y="'+(t+ph-hn-5)+'" text-anchor="middle" font-size="9" fill="#a8696a">+'+Math.round((s[k]-pre[k])*10)/10+'</text>';});
-    q('#v20-beforeafter').innerHTML='<svg viewBox="0 0 '+W+' '+H+'" style="width:100%;max-height:340px">'+grid+bars
+    q('#v20-beforeafter').innerHTML='<div class="ba-kpi">'
+      +'<div><span>机制介入前</span><b id="ba-pre">0</b></div>'
+      +'<div class="ba-mid"><span>提升</span><b id="ba-diff">0</b></div>'
+      +'<div><span>机制介入后</span><b id="ba-post">0</b></div></div>'
+      +'<svg viewBox="0 0 '+W+' '+H+'" style="width:100%;max-height:340px">'+grid+bars
       +'<rect x="'+(l+6)+'" y="6" width="10" height="10" rx="2" fill="#b8b8bb"/><text x="'+(l+20)+'" y="15" font-size="10" fill="#70666a">机制介入前</text>'
       +'<rect x="'+(l+92)+'" y="6" width="10" height="10" rx="2" fill="#bc7873"/><text x="'+(l+106)+'" y="15" font-size="10" fill="#70666a">机制介入后</text></svg>';
+    (function(){
+      function countTo(id,to,dur){
+        var el=q('#'+id); if(!el)return; var st=null;
+        function step(ts){ if(st===null)st=ts; var p=Math.min(1,(ts-st)/dur), e=1-Math.pow(1-p,3);
+          el.textContent=Math.round(to*e); if(p<1)requestAnimationFrame(step); }
+        requestAnimationFrame(step);
+      }
+      countTo('ba-pre',preS,620); countTo('ba-post',postS,620); countTo('ba-diff',postS-preS,620);
+    })();
+    requestAnimationFrame(function(){
+      var barsList=[].slice.call(q('#v20-beforeafter').querySelectorAll('rect.ba-bar'));
+      barsList.forEach(function(r,i){
+        var th=parseFloat(r.getAttribute('data-h'))||0, ty=parseFloat(r.getAttribute('data-y'))||0, by=parseFloat(r.getAttribute('data-base'))||0;
+        var st=null;
+        function step(ts){
+          if(st===null)st=ts;
+          var t=ts-st-i*38;
+          if(t<0){requestAnimationFrame(step);return}
+          var p=Math.min(1,t/560), e=1-Math.pow(1-p,3);
+          r.setAttribute('height',(th*e).toFixed(2));
+          r.setAttribute('y',(by+(ty-by)*e).toFixed(2));
+          if(p<1)requestAnimationFrame(step);
+        }
+        requestAnimationFrame(step);
+      });
+    });
     var diff=postS-preS, pct=preS?Math.round(diff/preS*100):0;
     var all=(window.__DOC_SIM_API&&window.__DOC_SIM_API.data||[]).filter(function(d){return typeof d.spiral==='number'&&String(d.id)!=='新'});
     function ma(d){var g=function(k){return Number(d[k])||0};return (((g('body')+g('view'))/2)+((g('team_resonance')+g('support'))/2)+((g('emotion')+g('action'))/2))/3}
