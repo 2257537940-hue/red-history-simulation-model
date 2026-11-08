@@ -464,6 +464,19 @@ details summary{cursor:pointer}
 .v20-whead,.v20-wrow{display:grid;grid-template-columns:1fr 90px 90px 90px;gap:8px;font-size:12px;padding:6px 0;border-bottom:1px dashed #e8e1da;color:#4f474b}
 .v20-whead{font-weight:700;color:#8a8085;border-bottom:1px solid #e4e8e7}
 .v20-wrow b{font-weight:600;color:#3f3a3c}
+#v20-beforeafter .ba-bar{transition:opacity .2s}
+#v20-beforeafter .ba-bar:hover{opacity:.8}
+#v20-evidence{animation:baFade .6s ease both}
+@keyframes baFade{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+.qg-grid{display:grid;grid-template-columns:1fr;gap:10px}
+.qg-group{display:grid;grid-template-columns:150px 1fr;gap:10px;align-items:start}
+.qg-label{font-size:12px;color:#70666a;padding-top:6px}
+.qg-chips{display:flex;flex-wrap:wrap;gap:6px}
+.qg-chip{border:1px solid #e4e8e7;background:#fbfcfc;color:#5f575a;font-size:12px;padding:5px 10px;border-radius:6px;cursor:pointer;transition:all .15s}
+.qg-chip:hover{border-color:#bc7873;color:#a8696a}
+.qg-chip.active{background:#bc7873;border-color:#bc7873;color:#fff}
+.qg-actions{display:flex;gap:10px;align-items:center;margin-top:14px}
+@media(max-width:760px){.qg-group{grid-template-columns:1fr}}
 @media(max-width:760px){.v20-triad,.v20-grid{grid-template-columns:1fr}}
 </style>
 <script id="v20-script">
@@ -491,6 +504,68 @@ details summary{cursor:pointer}
    +'<div id="v20-beforeafter"></div><div id="v20-evidence" class="v20-concl"></div></div>'
    +'<div class="v20-block" style="margin-top:16px"><h3>权重对比（专家赋权 vs 熵权法）</h3><div id="v20-weights"></div></div></div>';
   var grid=q('#ds-input-text')?q('#ds-input-text').closest('.ds-grid'):null;
+  var qg=el('section','panel'); qg.id='v20-quickgen';
+  qg.innerHTML=''
+   +'<div class="panel-head"><div><h2>快速生成学生描述</h2><p>不想逐字打字？勾选下面几项，系统自动拼成一段学生描述并完成分析。</p></div></div>'
+   +'<div class="panel-body">'
+   +'<div class="qg-grid">'
+   +'<div class="qg-group"><span class="qg-label">参观场馆类型</span><div class="qg-chips" data-group="venue"><button type="button" class="qg-chip" data-v="革命历史博物馆类">革命历史博物馆类</button><button type="button" class="qg-chip" data-v="战役（遗址）纪念馆类">战役（遗址）纪念馆类</button><button type="button" class="qg-chip" data-v="人物（精神）纪念馆类">人物（精神）纪念馆类</button></div></div>'
+   +'<div class="qg-group"><span class="qg-label">参观形式</span><div class="qg-chips" data-group="form"><button type="button" class="qg-chip" data-v="跟随团支部集体组织">跟团支部集体组织</button><button type="button" class="qg-chip" data-v="个人自发前往">个人自发前往</button></div></div>'
+   +'<div class="qg-group"><span class="qg-label">过去一年参观次数</span><div class="qg-chips" data-group="freq"><button type="button" class="qg-chip" data-v="0次">0次</button><button type="button" class="qg-chip" data-v="1次">1次</button><button type="button" class="qg-chip" data-v="2次">2次</button><button type="button" class="qg-chip" data-v="3次及以上">3次及以上</button></div></div>'
+   +'<div class="qg-group"><span class="qg-label">现场体验（可多选）</span><div class="qg-chips" data-group="body" data-multi="1"><button type="button" class="qg-chip" data-v="认真看了每一件展品">看了展品</button><button type="button" class="qg-chip" data-v="听了现场讲解">听了讲解</button><button type="button" class="qg-chip" data-v="亲手操作了互动装置">亲手操作</button><button type="button" class="qg-chip" data-v="沉浸在场景复原中">沉浸场景</button><button type="button" class="qg-chip" data-v="重走了革命旧址">重走旧址</button><button type="button" class="qg-chip" data-v="参与了角色扮演">角色扮演</button><button type="button" class="qg-chip" data-v="参加了献花宣誓">献花宣誓</button></div></div>'
+   +'<div class="qg-group"><span class="qg-label">情感反应（可多选）</span><div class="qg-chips" data-group="emotion" data-multi="1"><button type="button" class="qg-chip" data-v="很受感动">很受感动</button><button type="button" class="qg-chip" data-v="深感震撼">深感震撼</button><button type="button" class="qg-chip" data-v="产生了强烈共鸣">强烈共鸣</button><button type="button" class="qg-chip" data-v="铭记于心">铭记于心</button><button type="button" class="qg-chip" data-v="没什么感觉">没什么感觉</button></div></div>'
+   +'<div class="qg-group"><span class="qg-label">历史认知（可多选）</span><div class="qg-chips" data-group="view" data-multi="1"><button type="button" class="qg-chip" data-v="理清了历史脉络">理清脉络</button><button type="button" class="qg-chip" data-v="学会了辨析史料">辨析史料</button><button type="button" class="qg-chip" data-v="对党史有了系统认识">系统认识党史</button><button type="button" class="qg-chip" data-v="仍比较模糊">仍比较模糊</button></div></div>'
+   +'<div class="qg-group"><span class="qg-label">后续行动（可多选）</span><div class="qg-chips" data-group="action" data-multi="1"><button type="button" class="qg-chip" data-v="参加了团支部研讨">团支部研讨</button><button type="button" class="qg-chip" data-v="报名了志愿讲解">志愿讲解</button><button type="button" class="qg-chip" data-v="写了心得体会">写心得</button><button type="button" class="qg-chip" data-v="参加了社会调研">社会调研</button><button type="button" class="qg-chip" data-v="没有参加任何后续活动">尚未行动</button></div></div>'
+   +'<div class="qg-group"><span class="qg-label">团队协作</span><div class="qg-chips" data-group="team"><button type="button" class="qg-chip" data-v="团队分工协作完成任务">团队分工协作</button><button type="button" class="qg-chip" data-v="和同学一起参观讨论">和同学一起</button><button type="button" class="qg-chip" data-v="我独自参观，没有和同学交流">独自参观</button></div></div>'
+   +'<div class="qg-group"><span class="qg-label">组织支持（可多选）</span><div class="qg-chips" data-group="support" data-multi="1"><button type="button" class="qg-chip" data-v="学校团委组织">团委组织</button><button type="button" class="qg-chip" data-v="老师带队">老师带队</button><button type="button" class="qg-chip" data-v="配备了红色导师">红色导师</button><button type="button" class="qg-chip" data-v="纳入青马工程">青马工程</button><button type="button" class="qg-chip" data-v="没有组织安排">无组织安排</button></div></div>'
+   +'</div>'
+   +'<div class="qg-actions"><button id="qg-build" class="btn primary" type="button">生成描述并分析</button><button id="qg-clear" class="btn" type="button">清空选择</button><span id="qg-status" class="ds-small"></span></div>'
+   +'</div>';
+  if(grid){grid.insertAdjacentElement('beforebegin',qg)}else{document.body.insertBefore(qg,document.body.firstChild)}
+  (function(){
+    var picked={};
+    qg.querySelectorAll('.qg-chips').forEach(function(box){
+      var g=box.getAttribute('data-group'), multi=box.getAttribute('data-multi')==='1';
+      box.querySelectorAll('.qg-chip').forEach(function(btn){
+        btn.addEventListener('click',function(){
+          var v=btn.getAttribute('data-v');
+          if(!multi){
+            var was=btn.classList.contains('active');
+            box.querySelectorAll('.qg-chip').forEach(function(b){b.classList.remove('active')});
+            picked[g]=was?[]:[v];
+            if(!was)btn.classList.add('active');
+          }else{
+            btn.classList.toggle('active');
+            picked[g]=picked[g]||[];
+            var i=picked[g].indexOf(v);
+            if(btn.classList.contains('active')){if(i<0)picked[g].push(v)}else if(i>=0){picked[g].splice(i,1)}
+          }
+        });
+      });
+    });
+    function txt(g){return (picked[g]||[]).join('，')}
+    q('#qg-build').addEventListener('click',function(){
+      var d='';
+      if(txt('venue')||txt('form')){var s1='我';if(txt('form'))s1+=txt('form');if(txt('venue'))s1+='参观了'+txt('venue')+'的红色教育基地';d+=s1+'。'}
+      if(txt('freq'))d+='过去一年我参观红色教育基地'+txt('freq')+'。';
+      if(txt('body'))d+='参观时'+txt('body')+'。';
+      if(txt('emotion'))d+=txt('emotion')+'。';
+      if(txt('view'))d+=txt('view')+'。';
+      if(txt('action'))d+='参观后'+txt('action')+'。';
+      if(txt('team'))d+=txt('team')+'。';
+      if(txt('support'))d+=txt('support')+'。';
+      if(d==='。'){q('#qg-status').textContent='请至少选择一项';return}
+      q('#ds-input-text').value=d;
+      q('#qg-status').textContent='已生成 '+d.length+' 字，正在分析…';
+      var btn=q('#ds-analyze'); if(btn)btn.click();
+      setTimeout(function(){q('#qg-status').textContent='分析完成'},900);
+      document.querySelector('#v20-validator')?.scrollIntoView({behavior:'smooth',block:'start'});
+    });
+    q('#qg-clear').addEventListener('click',function(){
+      picked={}; qg.querySelectorAll('.qg-chip').forEach(function(b){b.classList.remove('active')});
+      q('#qg-status').textContent='已清空';
+    });
+  })();
   if(grid){grid.insertAdjacentElement('afterend',sec)}else{document.body.appendChild(sec)}
   var sb=q('#ds-score-bars');if(sb){var c=sb.closest('.ds-card');if(c)c.style.display='none'}
   var h=q('.ds-head h1'),p=q('.ds-head p');
@@ -531,8 +606,8 @@ details summary{cursor:pointer}
     var W=640,H=320,l=44,r=12,t=28,b=58,pw=W-l-r,ph=H-t-b,gw=pw/keys.length,bw=gw*0.28,grid='',bars='';
     for(var v=0;v<=4;v++){var yy=t+ph-v/4*ph;grid+='<line x1="'+l+'" y1="'+yy+'" x2="'+(l+pw)+'" y2="'+yy+'" stroke="#e4e8e7"/><text x="'+(l-8)+'" y="'+(yy+3)+'" text-anchor="end" font-size="10" fill="#8a8085">'+v+'</text>'}
     keys.forEach(function(k,i){var x0=l+i*gw+gw*0.5,hp=(pre[k]/4)*ph,hn=(s[k]/4)*ph;
-      bars+='<rect x="'+(x0-bw-2)+'" y="'+(t+ph-hp)+'" width="'+bw+'" height="'+hp+'" rx="3" fill="#b8b8bb"><title>机制介入前 '+NAMES[k]+'：'+pre[k]+'</title></rect>';
-      bars+='<rect x="'+(x0+2)+'" y="'+(t+ph-hn)+'" width="'+bw+'" height="'+hn+'" rx="3" fill="#bc7873"><title>机制介入后 '+NAMES[k]+'：'+s[k]+'</title></rect>';
+      bars+='<rect class="ba-bar" x="'+(x0-bw-2)+'" y="'+(t+ph)+'" width="'+bw+'" height="0" rx="3" fill="#b8b8bb"><animate attributeName="height" from="0" to="'+hp+'" dur="0.65s" begin="'+(i*0.06)+'s" fill="freeze"/><animate attributeName="y" from="'+(t+ph)+'" to="'+(t+ph-hp)+'" dur="0.65s" begin="'+(i*0.06)+'s" fill="freeze"/><title>机制介入前 '+NAMES[k]+'：'+pre[k]+'</title></rect>';
+      bars+='<rect class="ba-bar" x="'+(x0+2)+'" y="'+(t+ph)+'" width="'+bw+'" height="0" rx="3" fill="#bc7873"><animate attributeName="height" from="0" to="'+hn+'" dur="0.65s" begin="'+(i*0.06+0.12)+'s" fill="freeze"/><animate attributeName="y" from="'+(t+ph)+'" to="'+(t+ph-hn)+'" dur="0.65s" begin="'+(i*0.06+0.12)+'s" fill="freeze"/><title>机制介入后 '+NAMES[k]+'：'+s[k]+'</title></rect>';
       bars+='<text x="'+x0+'" y="'+(H-34)+'" text-anchor="middle" font-size="10" fill="#70666a">'+NAMES[k]+'</text>';
       if(s[k]!==pre[k])bars+='<text x="'+x0+'" y="'+(t+ph-hn-5)+'" text-anchor="middle" font-size="9" fill="#a8696a">+'+Math.round((s[k]-pre[k])*10)/10+'</text>';});
     q('#v20-beforeafter').innerHTML='<svg viewBox="0 0 '+W+' '+H+'" style="width:100%;max-height:340px">'+grid+bars
