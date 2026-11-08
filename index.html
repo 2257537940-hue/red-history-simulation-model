@@ -450,7 +450,7 @@ details summary{cursor:pointer}
 .v20-grid{display:grid;grid-template-columns:1.1fr .9fr;gap:16px}
 .v20-block{border:1px solid #e4e8e7;border-radius:8px;padding:14px;background:#fff}
 .v20-block h3{font-size:13px;margin:0 0 10px;color:#3f3a3c}
-.v20-row{display:grid;grid-template-columns:120px 1fr 62px;gap:10px;align-items:center;margin:9px 0;font-size:12px;color:#5f575a}
+.v20-row{display:grid;grid-template-columns:120px 1fr 92px;gap:10px;align-items:center;margin:9px 0;font-size:12px;color:#5f575a}
 .v20-track{height:10px;background:#eef1f0;border-radius:5px;overflow:hidden}
 .v20-track i{display:block;height:100%;border-radius:5px}
 .v20-prob{display:flex;justify-content:space-between;align-items:center;border-bottom:1px dashed #e8e1da;padding:9px 0;font-size:12px;color:#4f474b}
@@ -618,49 +618,55 @@ details summary{cursor:pointer}
   function dims(){var g=function(k){var e=q('#scoreA-'+k);return e?Math.max(0,Math.min(4,Number(e.value)||0)):0};
     return {body:g('body'),emotion:g('emotion'),view:g('view'),action:g('action'),team:g('team_resonance'),support:g('support')}}
   function rd(v){return Math.round(v*10)/10}
-  function status(v){return v>=3?'已解决':v>=2?'部分解决':'未解决'}
-  function pill(v){return v>=3?'ok':v>=2?'mid':'bad'}
+  function status(v){return v>=3?'已解决':v>=1.5?'部分解决':'未解决'}
+  function pill(v){return v>=3?'ok':v>=1.5?'mid':'bad'}
   var NAMES={body:'身体感知',emotion:'情感体验',view:'历史观认知',action:'行动转化',team:'团队共融',support:'组织支持'};
   function render(){
-    var s=dims();
-    var m={field:rd((s.body+s.view)/2),org:rd((s.team+s.support)/2),carrier:rd((s.emotion+s.action)/2)};
-    var rows=[['场域支撑（在哪里育）',m.field,'#bc7873'],['组织引领（谁来领）',m.org,'#88acc1'],['载体激活（怎么育）',m.carrier,'#c9a6a0']];
-    q('#v20-mech').innerHTML=rows.map(function(r){return '<div class="v20-row"><span>'+r[0]+'</span><div class="v20-track"><i style="width:'+(r[1]/4*100)+'%;background:'+r[2]+'"></i></div><strong>'+r[1].toFixed(1)+'</strong></div>'}).join('');
-    q('#v20-dims').innerHTML=Object.keys(NAMES).map(function(k){return '<span class="v20-dim">'+NAMES[k]+' '+s[k]+'/4</span>'}).join('');
-    var probs=[['认知转化断裂','场域支撑',m.field],['组织保障不足','组织引领',m.org],['行动转化脱节','载体激活',m.carrier]];
+    var pre=dims();                                  // 描述 = 介入前（实测）
+    var GAIN={body:0.45,emotion:0.42,view:0.40,action:0.45,team:0.40,support:0.50};
+    var post={};                                     // 介入后 = 预测（下限1，永不为0）
+    Object.keys(GAIN).forEach(function(k){
+      var b=Number(pre[k])||0;
+      post[k]=Math.min(4,Math.max(1,Math.round((b+GAIN[k]*(4-b))*10)/10));
+    });
+    var mp=function(x){return {field:rd((x.body+x.view)/2),org:rd((x.team+x.support)/2),carrier:rd((x.emotion+x.action)/2)}};
+    var mPre=mp(pre), mPost=mp(post);
+    var rows=[['场域支撑（在哪里育）',mPre.field,mPost.field,'#bc7873'],['组织引领（谁来领）',mPre.org,mPost.org,'#88acc1'],['载体激活（怎么育）',mPre.carrier,mPost.carrier,'#c9a6a0']];
+    q('#v20-mech').innerHTML=rows.map(function(r){return '<div class="v20-row"><span>'+r[0]+'</span><div class="v20-track"><i style="width:'+(r[2]/4*100)+'%;background:'+r[3]+'"></i></div><strong>'+r[1].toFixed(1)+'→'+r[2].toFixed(1)+'</strong></div>'}).join('');
+    q('#v20-dims').innerHTML=Object.keys(NAMES).map(function(k){return '<span class="v20-dim">'+NAMES[k]+' '+pre[k]+' → '+post[k]+'</span>'}).join('');
+    var probs=[['认知转化断裂','场域支撑',mPost.field],['组织保障不足','组织引领',mPost.org],['行动转化脱节','载体激活',mPost.carrier]];
     q('#v20-problems').innerHTML=probs.map(function(p){return '<div class="v20-prob"><span>'+p[0]+'　<span style="color:#8a8085;font-size:11px">由'+p[1]+'解决</span></span><span class="v20-pill '+pill(p[2])+'">'+status(p[2])+'</span></div>'}).join('');
     var cx=170,cy=150,r=95,lab=['场域支撑','组织引领','载体激活'];
     function pt(v,i){var a=(-90+i*120)*Math.PI/180;return [cx+r*v/4*Math.cos(a),cy+r*v/4*Math.sin(a)]}
     var out='<svg viewBox="0 0 340 300" style="width:100%;max-width:360px;display:block;margin:0 auto">';
     for(var ring=1;ring<=4;ring++)out+='<polygon points="'+[0,1,2].map(function(i){return pt(ring,i).join(',')}).join(' ')+'" fill="none" stroke="#e4e8e7"/>';
     [0,1,2].forEach(function(i){var e=pt(4,i),lp=pt(4.55,i);out+='<line x1="'+cx+'" y1="'+cy+'" x2="'+e[0]+'" y2="'+e[1]+'" stroke="#e4e8e7"/><text x="'+lp[0]+'" y="'+lp[1]+'" text-anchor="middle" font-size="11" fill="#70666a">'+lab[i]+'</text>'});
-    out+='<polygon points="'+[0,1,2].map(function(i){return pt(3,i).join(',')}).join(' ')+'" fill="none" stroke="#b8b8bb" stroke-dasharray="4 3"/>';
-    out+='<polygon points="'+[m.field,m.org,m.carrier].map(function(v,i){return pt(v,i).join(',')}).join(' ')+'" fill="rgba(218,161,169,.28)" stroke="#bc7873" stroke-width="2"/>';
+    out+='<polygon points="'+[mPre.field,mPre.org,mPre.carrier].map(function(v,i){return pt(v,i).join(',')}).join(' ')+'" fill="rgba(184,184,187,.18)" stroke="#b8b8bb" stroke-width="1.6" stroke-dasharray="5 4"/>';
+    out+='<polygon points="'+[mPost.field,mPost.org,mPost.carrier].map(function(v,i){return pt(v,i).join(',')}).join(' ')+'" fill="rgba(218,161,169,.26)" stroke="#bc7873" stroke-width="2.2"/>';
+    out+='<text x="170" y="20" text-anchor="middle" font-size="10" fill="#8a8085">虚线：介入前　实线：介入后（预测）</text>';
     out+='</svg>';
     q('#v20-radar').innerHTML=out;
-    var weak=rows.filter(function(x){return x[1]<3}).map(function(x){return x[0].split('（')[0]});
+    var weak=rows.filter(function(x){return x[2]<3}).map(function(x){return x[0].split('（')[0]});
     var txt;
-    if(weak.length===0){txt='<strong>判定：</strong>三维机制已形成合力，三类问题均得到解决，青年历史观实现由认知到认同、由感动到行动的整体跃迁。'}
-    else{txt='<strong>判定：</strong>当前短板集中在 <b>'+weak.join('、')+'</b>，对应问题尚未完全解决。建议优先补齐'+weak.join('、')+'，使三维机制协同发力。'}
+    if(weak.length===0){txt='<strong>判定：</strong>介入后三维机制得分均达到 3 分以上，三类问题均得到解决，历史观由认知到认同、由感动到行动实现整体跃迁。'}
+    else{txt='<strong>判定：</strong>介入后仍有 <b>'+weak.join('、')+'</b> 未达 3 分，建议加强对应机制。'}
     q('#v20-concl').innerHTML=txt;
-    var mechAvg=(m.field+m.org+m.carrier)/3, gain=Math.min(4,mechAvg/4*0.9), pre={};
-    Object.keys(s).forEach(function(k){pre[k]=Math.max(0,Math.round((s[k]-gain)*10)/10)});
     function sp(x){var d=function(k){return Number(x[k])||0};return Math.min(95,Math.max(5,Math.round(25*(0.18*d('body')+0.22*d('emotion')+0.20*d('view')+0.25*d('action')+0.10*d('team')+0.05*d('support')))))}
-    var preS=sp(pre), postS=sp(s), keys=['body','emotion','view','action','team','support'];
+    var preS=sp(pre), postS=sp(post), keys=['body','emotion','view','action','team','support'];
     var W=640,H=320,l=44,r=12,t=28,b=58,pw=W-l-r,ph=H-t-b,gw=pw/keys.length,bw=gw*0.28,grid='',bars='';
     for(var v=0;v<=4;v++){var yy=t+ph-v/4*ph;grid+='<line x1="'+l+'" y1="'+yy+'" x2="'+(l+pw)+'" y2="'+yy+'" stroke="#e4e8e7"/><text x="'+(l-8)+'" y="'+(yy+3)+'" text-anchor="end" font-size="10" fill="#8a8085">'+v+'</text>'}
-    keys.forEach(function(k,i){var x0=l+i*gw+gw*0.5,hp=(pre[k]/4)*ph,hn=(s[k]/4)*ph;
-      bars+='<rect class="ba-bar" x="'+(x0-bw*0.9)+'" y="'+(t+ph-hp)+'" width="'+(bw*1.8)+'" height="'+hp+'" rx="4" fill="#b8b8bb" data-pre="'+hp+'" data-post="'+hn+'" data-base="'+(t+ph)+'"><title>'+NAMES[k]+'：介入前 '+pre[k]+' → 介入后 '+s[k]+'</title></rect>';
+    keys.forEach(function(k,i){var x0=l+i*gw+gw*0.5,hp=(pre[k]/4)*ph,hn=(post[k]/4)*ph;
+      bars+='<rect class="ba-bar" x="'+(x0-bw*0.9)+'" y="'+(t+ph-hp)+'" width="'+(bw*1.8)+'" height="'+hp+'" rx="4" fill="#b8b8bb" data-pre="'+hp+'" data-post="'+hn+'" data-base="'+(t+ph)+'"><title>'+NAMES[k]+'：介入前 '+pre[k]+' → 介入后（预测） '+post[k]+'</title></rect>';
       bars+='<text x="'+x0+'" y="'+(H-34)+'" text-anchor="middle" font-size="10" fill="#70666a">'+NAMES[k]+'</text>';
-      if(s[k]!==pre[k])bars+='<text x="'+x0+'" y="'+(t+ph-hn-6)+'" text-anchor="middle" font-size="9" fill="#a8696a">+'+Math.round((s[k]-pre[k])*10)/10+'</text>';});
+      if(post[k]!==pre[k])bars+='<text x="'+x0+'" y="'+(t+ph-hn-6)+'" text-anchor="middle" font-size="9" fill="#a8696a">+'+Math.round((post[k]-pre[k])*10)/10+'</text>';});
     q('#v20-beforeafter').innerHTML='<div class="ba-kpi">'
-      +'<div><span>机制介入前</span><b id="ba-pre">0</b></div>'
+      +'<div><span>介入前（描述实测）</span><b id="ba-pre">0</b></div>'
       +'<div class="ba-mid"><span>提升</span><b id="ba-diff">0</b></div>'
       +'<div><span>机制介入后</span><b id="ba-post">0</b></div></div>'
       +'<svg viewBox="0 0 '+W+' '+H+'" style="width:100%;max-height:340px">'+grid+bars
-      +'<rect x="'+(l+6)+'" y="6" width="10" height="10" rx="2" fill="#b8b8bb"/><text x="'+(l+20)+'" y="15" font-size="10" fill="#70666a">介入前（矮·灰）</text>'
+      +'<rect x="'+(l+6)+'" y="6" width="10" height="10" rx="2" fill="#b8b8bb"/><text x="'+(l+20)+'" y="15" font-size="10" fill="#70666a">介入前（实测·灰）</text>'
       +'<text x="'+(l+120)+'" y="15" font-size="10" fill="#8a8085">→</text>'
-      +'<rect x="'+(l+140)+'" y="6" width="10" height="10" rx="2" fill="#bc7873"/><text x="'+(l+154)+'" y="15" font-size="10" fill="#70666a">介入后（高·玫瑰）</text></svg>';
+      +'<rect x="'+(l+140)+'" y="6" width="10" height="10" rx="2" fill="#bc7873"/><text x="'+(l+154)+'" y="15" font-size="10" fill="#70666a">介入后（预测·玫瑰）</text></svg>';
     (function(){
       function countTo(id,to,dur){
         var el=q('#'+id); if(!el)return; var st=null;
