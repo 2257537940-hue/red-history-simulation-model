@@ -431,4 +431,93 @@ details summary{cursor:pointer}
 .legend-dot,.legend-item i,.ds-type-legend i{width:10px;height:10px;border-radius:2px;display:inline-block}
 #v10-right-panel .panel-body{background:#fff}
 #v11-path-result .v10-chart-svg{border:1px solid #e4e8e7;border-radius:8px}
-</style></body></html>
+</style>
+<style id="v20-focus">
+#doc-sim-model .kpis,#doc-sim-model .mechanism,#doc-sim-model .notice,#manual-entry,#weight-panel,#v10-right-panel,#v10-bottom,.v11-nav,#v11-path-page{display:none!important}
+#v20-validator{margin:16px 0}
+.v20-triad{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:16px}
+.v20-card{border:1px solid #e4e8e7;border-radius:8px;padding:14px;background:#fbfcfc}
+.v20-tag{display:inline-block;font-size:11px;color:#fff;background:#bc7873;padding:2px 9px;border-radius:4px;margin-bottom:8px}
+.v20-card:nth-child(2) .v20-tag{background:#88acc1}
+.v20-card:nth-child(3) .v20-tag{background:#c9a6a0}
+.v20-card b{display:block;font-size:13px;color:#3f3a3c;margin-bottom:5px;line-height:1.5}
+.v20-card em{display:block;font-style:normal;font-size:11px;color:#8a8085}
+.v20-grid{display:grid;grid-template-columns:1.1fr .9fr;gap:16px}
+.v20-block{border:1px solid #e4e8e7;border-radius:8px;padding:14px;background:#fff}
+.v20-block h3{font-size:13px;margin:0 0 10px;color:#3f3a3c}
+.v20-row{display:grid;grid-template-columns:120px 1fr 62px;gap:10px;align-items:center;margin:9px 0;font-size:12px;color:#5f575a}
+.v20-track{height:10px;background:#eef1f0;border-radius:5px;overflow:hidden}
+.v20-track i{display:block;height:100%;border-radius:5px}
+.v20-prob{display:flex;justify-content:space-between;align-items:center;border-bottom:1px dashed #e8e1da;padding:9px 0;font-size:12px;color:#4f474b}
+.v20-pill{font-size:11px;padding:2px 9px;border-radius:4px}
+.v20-pill.ok{background:#e7efed;color:#4f6b60}
+.v20-pill.mid{background:#f5ede2;color:#8a6a4d}
+.v20-pill.bad{background:#f5e3e1;color:#9a5f5a}
+.v20-concl{margin-top:12px;padding:12px;background:#fbfcfc;border-left:4px solid #bc7873;border-radius:6px;font-size:12px;line-height:1.8;color:#4f474b}
+.v20-dims{display:flex;flex-wrap:wrap;gap:8px;margin-top:4px}
+.v20-dim{font-size:11px;color:#70666a;background:#f4f6f5;border:1px solid #e4e8e7;border-radius:4px;padding:3px 8px}
+@media(max-width:760px){.v20-triad,.v20-grid{grid-template-columns:1fr}}
+</style>
+<script id="v20-script">
+(function(){
+  function el(t,c,h){var e=document.createElement(t);if(c)e.className=c;if(h!=null)e.innerHTML=h;return e}
+  function q(s){return document.querySelector(s)}
+  var sec=el('section','panel');
+  sec.id='v20-validator';
+  sec.innerHTML=''
+   +'<div class="panel-head"><div><h2>三维联动机制验证</h2>'
+   +'<p>验证“场域支撑—组织引领—载体激活”协同发力，能否解决认知转化断裂、组织保障不足、行动转化脱节三类问题。</p></div></div>'
+   +'<div class="panel-body">'
+   +'<div class="v20-triad">'
+   +'<div class="v20-card"><span class="v20-tag">场域支撑</span><b>红色教育基地提供具身场域</b><em>解决“在哪里育”</em></div>'
+   +'<div class="v20-card"><span class="v20-tag">组织引领</span><b>党建带团建提供组织保障与示范引领</b><em>解决“谁来领”</em></div>'
+   +'<div class="v20-card"><span class="v20-tag">载体激活</span><b>青年喜闻乐见的实践形式激活主体参与</b><em>解决“怎么育”</em></div>'
+   +'</div>'
+   +'<div class="v20-grid">'
+   +'<div class="v20-block"><h3>三维机制得分（0—4）</h3><div id="v20-mech"></div>'
+   +'<h3 style="margin-top:16px">学生描述的事实依据（六维）</h3><div id="v20-dims" class="v20-dims"></div></div>'
+   +'<div class="v20-block"><h3>三类问题解决程度</h3><div id="v20-problems"></div>'
+   +'<h3 style="margin-top:16px">机制协同度</h3><div id="v20-radar"></div></div>'
+   +'</div><div id="v20-concl" class="v20-concl"></div></div>';
+  var grid=q('#ds-input-text')?q('#ds-input-text').closest('.ds-grid'):null;
+  if(grid){grid.insertAdjacentElement('afterend',sec)}else{document.body.appendChild(sec)}
+  var sb=q('#ds-score-bars');if(sb){var c=sb.closest('.ds-card');if(c)c.style.display='none'}
+  var h=q('.ds-head h1'),p=q('.ds-head p');
+  if(h)h.textContent='红色教育基地育人效果验证模型（V1.0）';
+  if(p)p.textContent='验证“场域支撑—组织引领—载体激活”三维联动机制：红色教育基地提供具身场域（在哪里育），党建带团建提供组织保障与示范引领（谁来领），青年喜闻乐见的实践形式激活主体参与（怎么育）。';
+  function dims(){var g=function(k){var e=q('#scoreA-'+k);return e?Math.max(0,Math.min(4,Number(e.value)||0)):0};
+    return {body:g('body'),emotion:g('emotion'),view:g('view'),action:g('action'),team:g('team_resonance'),support:g('support')}}
+  function rd(v){return Math.round(v*10)/10}
+  function status(v){return v>=3?'已解决':v>=2?'部分解决':'未解决'}
+  function pill(v){return v>=3?'ok':v>=2?'mid':'bad'}
+  var NAMES={body:'身体感知',emotion:'情感体验',view:'历史观认知',action:'行动转化',team:'团队共融',support:'组织支持'};
+  function render(){
+    var s=dims();
+    var m={field:rd((s.body+s.view)/2),org:rd((s.team+s.support)/2),carrier:rd((s.emotion+s.action)/2)};
+    var rows=[['场域支撑（在哪里育）',m.field,'#bc7873'],['组织引领（谁来领）',m.org,'#88acc1'],['载体激活（怎么育）',m.carrier,'#c9a6a0']];
+    q('#v20-mech').innerHTML=rows.map(function(r){return '<div class="v20-row"><span>'+r[0]+'</span><div class="v20-track"><i style="width:'+(r[1]/4*100)+'%;background:'+r[2]+'"></i></div><strong>'+r[1].toFixed(1)+'</strong></div>'}).join('');
+    q('#v20-dims').innerHTML=Object.keys(NAMES).map(function(k){return '<span class="v20-dim">'+NAMES[k]+' '+s[k]+'/4</span>'}).join('');
+    var probs=[['认知转化断裂','场域支撑',m.field],['组织保障不足','组织引领',m.org],['行动转化脱节','载体激活',m.carrier]];
+    q('#v20-problems').innerHTML=probs.map(function(p){return '<div class="v20-prob"><span>'+p[0]+'　<span style="color:#8a8085;font-size:11px">由'+p[1]+'解决</span></span><span class="v20-pill '+pill(p[2])+'">'+status(p[2])+'</span></div>'}).join('');
+    var cx=170,cy=150,r=95,lab=['场域支撑','组织引领','载体激活'];
+    function pt(v,i){var a=(-90+i*120)*Math.PI/180;return [cx+r*v/4*Math.cos(a),cy+r*v/4*Math.sin(a)]}
+    var out='<svg viewBox="0 0 340 300" style="width:100%;max-width:360px;display:block;margin:0 auto">';
+    for(var ring=1;ring<=4;ring++)out+='<polygon points="'+[0,1,2].map(function(i){return pt(ring,i).join(',')}).join(' ')+'" fill="none" stroke="#e4e8e7"/>';
+    [0,1,2].forEach(function(i){var e=pt(4,i),lp=pt(4.55,i);out+='<line x1="'+cx+'" y1="'+cy+'" x2="'+e[0]+'" y2="'+e[1]+'" stroke="#e4e8e7"/><text x="'+lp[0]+'" y="'+lp[1]+'" text-anchor="middle" font-size="11" fill="#70666a">'+lab[i]+'</text>'});
+    out+='<polygon points="'+[0,1,2].map(function(i){return pt(3,i).join(',')}).join(' ')+'" fill="none" stroke="#b8b8bb" stroke-dasharray="4 3"/>';
+    out+='<polygon points="'+[m.field,m.org,m.carrier].map(function(v,i){return pt(v,i).join(',')}).join(' ')+'" fill="rgba(218,161,169,.28)" stroke="#bc7873" stroke-width="2"/>';
+    out+='</svg>';
+    q('#v20-radar').innerHTML=out;
+    var weak=rows.filter(function(x){return x[1]<3}).map(function(x){return x[0].split('（')[0]});
+    var txt;
+    if(weak.length===0){txt='<strong>判定：</strong>三维机制已形成合力，三类问题均得到解决，青年历史观实现由认知到认同、由感动到行动的整体跃迁。'}
+    else{txt='<strong>判定：</strong>当前短板集中在 <b>'+weak.join('、')+'</b>，对应问题尚未完全解决。建议优先补齐'+weak.join('、')+'，使三维机制协同发力。'}
+    q('#v20-concl').innerHTML=txt;
+  }
+  function later(){setTimeout(render,350)}
+  document.addEventListener('click',function(e){if(e.target.closest('#ds-analyze')||e.target.closest('#ds-reset'))later()});
+  setTimeout(render,900);
+  window.__V20_RENDER__=render;
+})();
+</script>
+</body></html>
