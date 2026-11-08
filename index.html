@@ -479,7 +479,13 @@ details summary{cursor:pointer}
 .qg-chips{display:flex;flex-wrap:wrap;gap:6px}
 .qg-chip{border:1px solid #e4e8e7;background:#fbfcfc;color:#5f575a;font-size:12px;padding:5px 10px;border-radius:6px;cursor:pointer;transition:all .15s}
 .qg-chip:hover{border-color:#bc7873;color:#a8696a}
-.qg-chip.active{background:#bc7873;border-color:#bc7873;color:#fff}
+.qg-chip.active{background:#bc7873;border-color:#bc7873;color:#fff}.qg-help{display:inline-block;width:15px;height:15px;line-height:15px;text-align:center;border:1px solid #bc7873;color:#a8696a;border-radius:50%;font-size:11px;cursor:help;position:relative;margin-left:3px;vertical-align:middle;font-weight:400}
+.qg-help .qg-tip{display:none;position:absolute;left:-10px;top:20px;width:330px;z-index:60;background:#fff;border:1px solid #e4e8e7;box-shadow:0 6px 20px rgba(0,0,0,.10);border-radius:8px;padding:10px 12px;font-size:11px;color:#4f474b;line-height:1.75;text-align:left;white-space:normal;font-weight:400}
+.qg-help:hover .qg-tip,.qg-help:focus .qg-tip{display:block}
+.qg-tip b{color:#a8696a}
+.qg-other-wrap{display:inline-flex;align-items:center}
+.qg-other{border:1px solid #bc7873;border-radius:6px;padding:5px 8px;font-size:12px;width:160px;outline:none}
+.qg-other:focus{box-shadow:0 0 0 3px rgba(188,120,115,.15)}
 .qg-actions{display:flex;gap:10px;align-items:center;margin-top:14px}
 @media(max-width:760px){.qg-group{grid-template-columns:1fr}}
 @media(max-width:760px){.v20-triad,.v20-grid{grid-template-columns:1fr}}
@@ -514,15 +520,15 @@ details summary{cursor:pointer}
    +'<div class="panel-head"><div><h2>快速生成学生描述</h2><p>不想逐字打字？勾选下面几项，系统自动拼成一段学生描述并完成分析。</p></div></div>'
    +'<div class="panel-body">'
    +'<div class="qg-grid">'
-   +'<div class="qg-group"><span class="qg-label">参观场馆类型</span><div class="qg-chips" data-group="venue"><button type="button" class="qg-chip" data-v="革命历史博物馆类">革命历史博物馆类</button><button type="button" class="qg-chip" data-v="战役（遗址）纪念馆类">战役（遗址）纪念馆类</button><button type="button" class="qg-chip" data-v="人物（精神）纪念馆类">人物（精神）纪念馆类</button></div></div>'
+   +'<div class="qg-group"><span class="qg-label">参观场馆类型 <span class="qg-help" tabindex="0" aria-label="场馆类型说明">?<span class="qg-tip"><b>革命历史博物馆类</b>：以通史式展线为主，时间跨度长、史料完整，如中国共产党历史展览馆、中国共产党早期北京革命活动纪念馆。<br><b>战役（遗址）纪念馆类</b>：以战场遗址、空间沉浸见长，如中国人民抗日战争纪念馆。<br><b>人物（精神）纪念馆类</b>：以人物生命叙事、共情见长，如老海岛事迹陈列馆、侵华日军南京大屠杀遇难同胞纪念馆、南湖革命纪念馆、西柏坡纪念馆。</span></span></span><div class="qg-chips" data-group="venue"><button type="button" class="qg-chip" data-v="革命历史博物馆类">革命历史博物馆类</button><button type="button" class="qg-chip" data-v="战役（遗址）纪念馆类">战役（遗址）纪念馆类</button><button type="button" class="qg-chip" data-v="人物（精神）纪念馆类">人物（精神）纪念馆类</button><button type="button" class="qg-chip" data-v="其他" data-other="1">其他</button><span class="qg-other-wrap" style="display:none"><input class="qg-other" data-group="venue" placeholder="请输入场馆类型"></span></div></div>'
    +'<div class="qg-group"><span class="qg-label">参观形式</span><div class="qg-chips" data-group="form"><button type="button" class="qg-chip" data-v="跟随团支部集体组织">跟团支部集体组织</button><button type="button" class="qg-chip" data-v="个人自发前往">个人自发前往</button></div></div>'
    +'<div class="qg-group"><span class="qg-label">过去一年参观次数</span><div class="qg-chips" data-group="freq"><button type="button" class="qg-chip" data-v="0次">0次</button><button type="button" class="qg-chip" data-v="1次">1次</button><button type="button" class="qg-chip" data-v="2次">2次</button><button type="button" class="qg-chip" data-v="3次及以上">3次及以上</button></div></div>'
    +'<div class="qg-group"><span class="qg-label">现场体验（可多选）</span><div class="qg-chips" data-group="body" data-multi="1"><button type="button" class="qg-chip" data-v="认真看了每一件展品">看了展品</button><button type="button" class="qg-chip" data-v="听了现场讲解">听了讲解</button><button type="button" class="qg-chip" data-v="亲手操作了互动装置">亲手操作</button><button type="button" class="qg-chip" data-v="沉浸在场景复原中">沉浸场景</button><button type="button" class="qg-chip" data-v="重走了革命旧址">重走旧址</button><button type="button" class="qg-chip" data-v="参与了角色扮演">角色扮演</button><button type="button" class="qg-chip" data-v="参加了献花宣誓">献花宣誓</button></div></div>'
-   +'<div class="qg-group"><span class="qg-label">情感反应（可多选）</span><div class="qg-chips" data-group="emotion" data-multi="1"><button type="button" class="qg-chip" data-v="很受感动">很受感动</button><button type="button" class="qg-chip" data-v="深感震撼">深感震撼</button><button type="button" class="qg-chip" data-v="产生了强烈共鸣">强烈共鸣</button><button type="button" class="qg-chip" data-v="铭记于心">铭记于心</button><button type="button" class="qg-chip" data-v="没什么感觉">没什么感觉</button></div></div>'
-   +'<div class="qg-group"><span class="qg-label">历史认知（可多选）</span><div class="qg-chips" data-group="view" data-multi="1"><button type="button" class="qg-chip" data-v="理清了历史脉络">理清脉络</button><button type="button" class="qg-chip" data-v="学会了辨析史料">辨析史料</button><button type="button" class="qg-chip" data-v="对党史有了系统认识">系统认识党史</button><button type="button" class="qg-chip" data-v="仍比较模糊">仍比较模糊</button></div></div>'
-   +'<div class="qg-group"><span class="qg-label">后续行动（可多选）</span><div class="qg-chips" data-group="action" data-multi="1"><button type="button" class="qg-chip" data-v="参加了团支部研讨">团支部研讨</button><button type="button" class="qg-chip" data-v="报名了志愿讲解">志愿讲解</button><button type="button" class="qg-chip" data-v="写了心得体会">写心得</button><button type="button" class="qg-chip" data-v="参加了社会调研">社会调研</button><button type="button" class="qg-chip" data-v="没有参加任何后续活动">尚未行动</button></div></div>'
+   +'<div class="qg-group"><span class="qg-label">情感反应（可多选）</span><div class="qg-chips" data-group="emotion" data-multi="1"><button type="button" class="qg-chip" data-v="很受感动">很受感动</button><button type="button" class="qg-chip" data-v="深感震撼">深感震撼</button><button type="button" class="qg-chip" data-v="产生了强烈共鸣">强烈共鸣</button><button type="button" class="qg-chip" data-v="铭记于心">铭记于心</button><button type="button" class="qg-chip" data-v="没什么感觉" data-neg="1">没什么感觉</button></div></div>'
+   +'<div class="qg-group"><span class="qg-label">历史认知（可多选）</span><div class="qg-chips" data-group="view" data-multi="1"><button type="button" class="qg-chip" data-v="理清了历史脉络">理清脉络</button><button type="button" class="qg-chip" data-v="学会了辨析史料">辨析史料</button><button type="button" class="qg-chip" data-v="对党史有了系统认识">系统认识党史</button><button type="button" class="qg-chip" data-v="仍比较模糊" data-neg="1">仍比较模糊</button></div></div>'
+   +'<div class="qg-group"><span class="qg-label">后续行动（可多选）</span><div class="qg-chips" data-group="action" data-multi="1"><button type="button" class="qg-chip" data-v="参加了团支部研讨">团支部研讨</button><button type="button" class="qg-chip" data-v="报名了志愿讲解">志愿讲解</button><button type="button" class="qg-chip" data-v="写了心得体会">写心得</button><button type="button" class="qg-chip" data-v="参加了社会调研">社会调研</button><button type="button" class="qg-chip" data-v="没有参加任何后续活动" data-neg="1">尚未行动</button></div></div>'
    +'<div class="qg-group"><span class="qg-label">团队协作</span><div class="qg-chips" data-group="team"><button type="button" class="qg-chip" data-v="团队分工协作完成任务">团队分工协作</button><button type="button" class="qg-chip" data-v="和同学一起参观讨论">和同学一起</button><button type="button" class="qg-chip" data-v="我独自参观，没有和同学交流">独自参观</button></div></div>'
-   +'<div class="qg-group"><span class="qg-label">组织支持（可多选）</span><div class="qg-chips" data-group="support" data-multi="1"><button type="button" class="qg-chip" data-v="学校团委组织">团委组织</button><button type="button" class="qg-chip" data-v="老师带队">老师带队</button><button type="button" class="qg-chip" data-v="配备了红色导师">红色导师</button><button type="button" class="qg-chip" data-v="纳入青马工程">青马工程</button><button type="button" class="qg-chip" data-v="没有组织安排">无组织安排</button></div></div>'
+   +'<div class="qg-group"><span class="qg-label">组织支持（可多选）</span><div class="qg-chips" data-group="support" data-multi="1"><button type="button" class="qg-chip" data-v="学校团委组织">团委组织</button><button type="button" class="qg-chip" data-v="老师带队">老师带队</button><button type="button" class="qg-chip" data-v="配备了红色导师">红色导师</button><button type="button" class="qg-chip" data-v="纳入青马工程">青马工程</button><button type="button" class="qg-chip" data-v="没有组织安排" data-neg="1">无组织安排</button></div></div>'
    +'</div>'
    +'<div class="qg-actions"><button id="qg-build" class="btn primary" type="button">生成描述并分析</button><button id="qg-clear" class="btn" type="button">清空选择</button><span id="qg-status" class="ds-small"></span></div>'
    +'</div>';
@@ -533,22 +539,55 @@ details summary{cursor:pointer}
       var g=box.getAttribute('data-group'), multi=box.getAttribute('data-multi')==='1';
       box.querySelectorAll('.qg-chip').forEach(function(btn){
         btn.addEventListener('click',function(){
-          var v=btn.getAttribute('data-v');
+          var v=btn.getAttribute('data-v'), isNeg=btn.getAttribute('data-neg')==='1';
+          var otherWrap=box.querySelector('.qg-other-wrap');
+          if(btn.getAttribute('data-other')==='1'){
+            var on=!btn.classList.contains('active');
+            box.querySelectorAll('.qg-chip').forEach(function(b){b.classList.remove('active')});
+            picked[g]=on?[v]:[];
+            if(on)btn.classList.add('active');
+            if(otherWrap){otherWrap.style.display=on?'inline-flex':'none';var oi=otherWrap.querySelector('input');if(on&&oi)setTimeout(function(){oi.focus()},60)}
+            return;
+          }
           if(!multi){
             var was=btn.classList.contains('active');
             box.querySelectorAll('.qg-chip').forEach(function(b){b.classList.remove('active')});
             picked[g]=was?[]:[v];
             if(!was)btn.classList.add('active');
+            if(otherWrap)otherWrap.style.display='none';
+            return;
+          }
+          picked[g]=picked[g]||[];
+          if(isNeg){
+            var wasNeg=btn.classList.contains('active');
+            box.querySelectorAll('.qg-chip').forEach(function(b){b.classList.remove('active')});
+            picked[g]=wasNeg?[]:[v];
+            if(!wasNeg)btn.classList.add('active');
+            return;
+          }
+          var wasOn=btn.classList.contains('active');
+          if(!wasOn){
+            box.querySelectorAll('.qg-chip[data-neg="1"]').forEach(function(b){
+              if(b.classList.contains('active')){b.classList.remove('active');var j=picked[g].indexOf(b.getAttribute('data-v'));if(j>=0)picked[g].splice(j,1)}
+            });
+            btn.classList.add('active');
+            if(picked[g].indexOf(v)<0)picked[g].push(v);
           }else{
-            btn.classList.toggle('active');
-            picked[g]=picked[g]||[];
-            var i=picked[g].indexOf(v);
-            if(btn.classList.contains('active')){if(i<0)picked[g].push(v)}else if(i>=0){picked[g].splice(i,1)}
+            btn.classList.remove('active');
+            var k=picked[g].indexOf(v);if(k>=0)picked[g].splice(k,1);
           }
         });
       });
     });
-    function txt(g){return (picked[g]||[]).join('，')}
+    function txt(g){
+      var arr=(picked[g]||[]).slice();
+      if(arr.indexOf('其他')>=0){
+        var inp=qg.querySelector('.qg-other[data-group="'+g+'"]');
+        var val=inp&&inp.value.trim()?inp.value.trim():'其他';
+        arr=arr.map(function(x){return x==='其他'?val:x});
+      }
+      return arr.join('，');
+    }
     q('#qg-build').addEventListener('click',function(){
       var d='';
       if(txt('venue')||txt('form')){var s1='我';if(txt('form'))s1+=txt('form');if(txt('venue'))s1+='参观了'+txt('venue')+'的红色教育基地';d+=s1+'。'}
@@ -611,17 +650,17 @@ details summary{cursor:pointer}
     var W=640,H=320,l=44,r=12,t=28,b=58,pw=W-l-r,ph=H-t-b,gw=pw/keys.length,bw=gw*0.28,grid='',bars='';
     for(var v=0;v<=4;v++){var yy=t+ph-v/4*ph;grid+='<line x1="'+l+'" y1="'+yy+'" x2="'+(l+pw)+'" y2="'+yy+'" stroke="#e4e8e7"/><text x="'+(l-8)+'" y="'+(yy+3)+'" text-anchor="end" font-size="10" fill="#8a8085">'+v+'</text>'}
     keys.forEach(function(k,i){var x0=l+i*gw+gw*0.5,hp=(pre[k]/4)*ph,hn=(s[k]/4)*ph;
-      bars+='<rect class="ba-bar" x="'+(x0-bw-2)+'" y="'+(t+ph)+'" width="'+bw+'" height="0" rx="3" fill="#b8b8bb" data-h="'+hp+'" data-y="'+(t+ph-hp)+'" data-base="'+(t+ph)+'"><title>机制介入前 '+NAMES[k]+'：'+pre[k]+'</title></rect>';
-      bars+='<rect class="ba-bar" x="'+(x0+2)+'" y="'+(t+ph)+'" width="'+bw+'" height="0" rx="3" fill="#bc7873" data-h="'+hn+'" data-y="'+(t+ph-hn)+'" data-base="'+(t+ph)+'"><title>机制介入后 '+NAMES[k]+'：'+s[k]+'</title></rect>';
+      bars+='<rect class="ba-bar" x="'+(x0-bw*0.9)+'" y="'+(t+ph-hp)+'" width="'+(bw*1.8)+'" height="'+hp+'" rx="4" fill="#b8b8bb" data-pre="'+hp+'" data-post="'+hn+'" data-base="'+(t+ph)+'"><title>'+NAMES[k]+'：介入前 '+pre[k]+' → 介入后 '+s[k]+'</title></rect>';
       bars+='<text x="'+x0+'" y="'+(H-34)+'" text-anchor="middle" font-size="10" fill="#70666a">'+NAMES[k]+'</text>';
-      if(s[k]!==pre[k])bars+='<text x="'+x0+'" y="'+(t+ph-hn-5)+'" text-anchor="middle" font-size="9" fill="#a8696a">+'+Math.round((s[k]-pre[k])*10)/10+'</text>';});
+      if(s[k]!==pre[k])bars+='<text x="'+x0+'" y="'+(t+ph-hn-6)+'" text-anchor="middle" font-size="9" fill="#a8696a">+'+Math.round((s[k]-pre[k])*10)/10+'</text>';});
     q('#v20-beforeafter').innerHTML='<div class="ba-kpi">'
       +'<div><span>机制介入前</span><b id="ba-pre">0</b></div>'
       +'<div class="ba-mid"><span>提升</span><b id="ba-diff">0</b></div>'
       +'<div><span>机制介入后</span><b id="ba-post">0</b></div></div>'
       +'<svg viewBox="0 0 '+W+' '+H+'" style="width:100%;max-height:340px">'+grid+bars
-      +'<rect x="'+(l+6)+'" y="6" width="10" height="10" rx="2" fill="#b8b8bb"/><text x="'+(l+20)+'" y="15" font-size="10" fill="#70666a">机制介入前</text>'
-      +'<rect x="'+(l+92)+'" y="6" width="10" height="10" rx="2" fill="#bc7873"/><text x="'+(l+106)+'" y="15" font-size="10" fill="#70666a">机制介入后</text></svg>';
+      +'<rect x="'+(l+6)+'" y="6" width="10" height="10" rx="2" fill="#b8b8bb"/><text x="'+(l+20)+'" y="15" font-size="10" fill="#70666a">介入前（矮·灰）</text>'
+      +'<text x="'+(l+120)+'" y="15" font-size="10" fill="#8a8085">→</text>'
+      +'<rect x="'+(l+140)+'" y="6" width="10" height="10" rx="2" fill="#bc7873"/><text x="'+(l+154)+'" y="15" font-size="10" fill="#70666a">介入后（高·玫瑰）</text></svg>';
     (function(){
       function countTo(id,to,dur){
         var el=q('#'+id); if(!el)return; var st=null;
@@ -641,8 +680,8 @@ details summary{cursor:pointer}
         if(start===null)start=ts;
         var t=(ts-start)%CYCLE;
         barsList.forEach(function(r,i){
-          var th=parseFloat(r.getAttribute('data-h'))||0,
-              ty=parseFloat(r.getAttribute('data-y'))||0,
+          var hp=parseFloat(r.getAttribute('data-pre'))||0,
+              hn=parseFloat(r.getAttribute('data-post'))||0,
               by=parseFloat(r.getAttribute('data-base'))||0;
           var tt=t-i*32; if(tt<0)tt=0;
           var f;
@@ -650,8 +689,11 @@ details summary{cursor:pointer}
           else if(tt<GROW+HOLD)f=1;
           else f=1-ease(Math.min(1,(tt-GROW-HOLD)/SHRINK));
           if(f<0)f=0;
-          r.setAttribute('height',(th*f).toFixed(2));
-          r.setAttribute('y',(by+(ty-by)*f).toFixed(2));
+          var h=hp+(hn-hp)*f;
+          r.setAttribute('height',h.toFixed(2));
+          r.setAttribute('y',(by-h).toFixed(2));
+          var cr=Math.round(184+(188-184)*f), cg=Math.round(184+(120-184)*f), cb=Math.round(187+(115-187)*f);
+          r.setAttribute('fill','rgb('+cr+','+cg+','+cb+')');
         });
         requestAnimationFrame(frame);
       }
